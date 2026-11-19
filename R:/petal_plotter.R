@@ -1,4 +1,18 @@
-iris <- datasets::iris
+# Read command-line arguments
+args <- commandArgs(trailingOnly = TRUE)
+species_a <- args[1] # The first argument is the name of the first species
+
+# EXERCISE: Store the second arguments as species_b.
+species_b <- args[2]
+
+
+# EXERCISE: Convert the third argument to an integer and store it as image_size.
+image_size <- as.integer(args[3])
+
+# EXERCISE: Put species_a and species_b into one vector called selected_species.
+selected_species <- c(species_a,species_b)
+
+iris_data <- datasets::iris
 
 species_colours <- c(
   setosa = "tomato",
@@ -6,21 +20,36 @@ species_colours <- c(
   virginica = "gold"
 )
 
+# Keep only data from the selected species
+iris_subset <- iris_data[iris_data$Species %in% selected_species, ]
+
+# EXERCISE: Create an output filename using species_a and species_b.
+"iris_setosa_vs_versicolor.png"
+
+output_file <- paste0(
+   "iris_",
+   species_a,
+   "_vs_",
+   species_b,
+   ".png"
+)
+
 png(filename = "iris_plot.png") # Open plot
 
 plot(
   Petal.Length ~ Petal.Width,
-  data = iris,
-  col = species_colours[as.character(iris$Species)],
+  data = iris_subset,
+  col = species_colours[as.character(iris_subset$Species)],
   pch = 19,
   xlab = "Petal width",
-  ylab = "Petal length"
+  ylab = "Petal length",
+  main = paste(species_a, "and", species_b)
 )
 
 legend(
   "topleft",
-  legend = names(species_colours),
-  col = species_colours,
+  legend = selected_species,
+  col = species_colours[selected_species],
   pch = 19,
   bty = "n"
 )
